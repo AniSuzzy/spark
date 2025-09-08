@@ -1,6 +1,6 @@
 {
   "name": "spark-bot-super",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Spark \u2014 WhatsApp Mini-Bot (Super) with silent auto-join on pairing",
   "main": "src/index.js",
   "type": "module",
@@ -16,7 +16,8 @@
     "mime": "^4.0.4",
     "pino": "^9.3.1",
     "qrcode-terminal": "^0.12.0",
-    "wa-sticker-formatter": "^4.4.4"
+    "wa-sticker-formatter": "^4.4.4",
+    "sharp": "^0.33.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"

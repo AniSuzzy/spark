@@ -16,13 +16,18 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(express.static(path.join(__dirname, 'public')))
 
+app.get('/health', (req, res) => {
+  res.json({ ok: true, msg: 'Spark server running' })
+})
+
 app.post('/api/pair', async (req, res) => {
   try {
     const { phone } = req.body
     if (!phone || !/^\d{10,15}$/.test(String(phone))) {
-      return res.status(400).json({ ok: false, error: 'Provide phone in international digits, e.g., 2348012345678' })
+      return res.status(400).json({ ok: false, error: 'Provide phone in international digits' })
     }
 
+    logger.info(`Pair request for ${phone}`)
     const sock = await getOrCreateSocket()
     const code = await requestPairingFor(sock, phone)
     return res.json({ ok: true, code })
@@ -32,7 +37,6 @@ app.post('/api/pair', async (req, res) => {
   }
 })
 
-// Optional: endpoint to trigger join manually (for testing)
 app.post('/api/trigger-join', async (req, res) => {
   try {
     const { userJid } = req.body
@@ -48,5 +52,5 @@ app.post('/api/trigger-join', async (req, res) => {
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
-  logger.info(`Spark pairing server on :${PORT}`)
+  logger.info(`🚀 Spark server is listening on port ${PORT}`)
 })
