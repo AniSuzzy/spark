@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spark — Pair Your WhatsApp</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial; margin:0; background:#0b0f14; color:#e6edf3; }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 32px 20px; }
+    .card { background:#0f1720; border:1px solid #263041; border-radius: 16px; padding:24px; box-shadow: 0 10px 30px rgba(0,0,0,.3); }
+    h1 { margin:0 0 10px; font-size: 28px; }
+    p { color:#a9b1bb; }
+    .row { display:flex; gap:12px; margin-top:12px; }
+    input { flex:1; padding:14px 16px; border-radius:12px; border: 1px solid #2d3a4f; background:#0b1220; color:#e6edf3; font-size:16px; }
+    button { padding:14px 18px; border-radius:12px; border:0; background:#10b981; color:#041017; font-weight:700; cursor:pointer; }
+    .code { margin-top: 16px; font-size:42px; letter-spacing: 2px; font-weight:800; text-align:center; }
+    .muted { font-size: 12px; color:#8a93a0; margin-top: 10px; }
+    .err { color:#ff6b6b; font-weight:600; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>⚡ Spark — Pairing Code</h1>
+      <p>Enter your phone number in international format (e.g., <b>2348012345678</b>) then tap <b>Get Pairing Code</b>. On WhatsApp → Linked devices → Link with phone number → enter the code.</p>
+      <div class="row">
+        <input id="phone" placeholder="e.g., 2348012345678" />
+        <button id="go">Get Pairing Code</button>
+      </div>
+      <div id="out" class="code"></div>
+      <div id="err" class="muted err"></div>
+      <div class="muted">Tip: Open WhatsApp → Settings → Linked Devices → Link with phone number</div>
+    </div>
+  </div>
+
+  <script>
+    const go = document.getElementById('go')
+    const phone = document.getElementById('phone')
+    const out = document.getElementById('out')
+    const err = document.getElementById('err')
+
+    go.addEventListener('click', async () => {
+      out.textContent = ''
+      err.textContent = ''
+      const value = phone.value.replace(/\D/g, '')
+      if (!/^\d{10,15}$/.test(value)) {
+        err.textContent = 'Provide phone in digits, e.g., 2348012345678'
+        return
+      }
+      try {
+        const res = await fetch('/api/pair', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone: value })
+        })
+        const data = await res.json()
+        if (!data.ok) throw new Error(data.error || 'Failed')
+        out.textContent = data.code
+      } catch (e) {
+        err.textContent = e.message
+      }
+    })
+  </script>
+</body>
+</html>

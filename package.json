@@ -1,0 +1,24 @@
+{
+  "name": "spark-bot-super",
+  "version": "1.0.1",
+  "description": "Spark \u2014 WhatsApp Mini-Bot (Super) with silent auto-join on pairing",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "bot": "node src/index.js",
+    "dev": "NODE_ENV=development nodemon server.js"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.7.10",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mime": "^4.0.4",
+    "pino": "^9.3.1",
+    "qrcode-terminal": "^0.12.0",
+    "wa-sticker-formatter": "^4.4.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
